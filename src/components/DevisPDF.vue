@@ -442,7 +442,6 @@ const calculateOccasion = () => {
 }
 .totals-section {
   margin-top: 10px;
-  border-top: 0.5px solid black;
   padding-top: 5px;
 }
 .totals-grid {
@@ -470,7 +469,6 @@ const calculateOccasion = () => {
 }
 .grand-total {
   margin-top: 5px;
-  border-top: 0.5px solid black;
   padding-top: 3px;
   text-align: center;
 }
