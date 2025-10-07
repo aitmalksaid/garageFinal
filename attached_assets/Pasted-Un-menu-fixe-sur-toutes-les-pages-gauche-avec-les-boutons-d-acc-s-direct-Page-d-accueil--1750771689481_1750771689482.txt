@@ -1,0 +1,33 @@
+Un menu fixe sur toutes les pages à gauche avec les boutons d’accès direct à : 
+
+Page d’accueil : listes des affaires avec le maximum d’informations (le statut, l’état d’avancement) , classement par catégories  
+
+Page création de devis ( numéro , date , client , matricule véhicule,  pièce a changer , fournisseurs, prix achat, prix de vente, catégories ( original ( tva à 20%  ) , adaptable (tva 20% , occasion (TVA à 0%)) , TVA , total HT, total TTC 
+
+page pour CRUD des client : id (auto incrément),  téléphone , email, adresse 
+
+page CRUD pour les voiture : id  (auto incrément),, matricule , marque , modèle, carte grise (plusieurs photos) 
+
+Page CRUD gestion des expert : id (auto incrément)  , nom , adresse, telephone, email 
+
+Page CRUD gestion des assurance : id (auto incrément) , nom , adresse, telephone, email 
+
+Page CRUD pour les affaires : id (auto incrément), date entrée , client, expert , assurance, statuts devis , photos voiture avant , photos voitures après 
+
+Page CRUD devis :  (auto incrément), date , statuts devis ( en cours, préparer, envoyer, accepter, rejeter) 
+
+Une fois le devis accepté, il devient un bon de commande  
+
+Donc il faut créer une page des bons de commande qui contient le détail des articles du devis  avec le statut pour chaque article du devis, c'est-à-dire les pièces de rechange  ( demande envoyer, en cours  de montage, finaliser,…) 
+
+Une case dans le devis prix achat avec un contrôle (notification si le prix de vente est inférieur au prix d’achat (par article)  
+
+Une page CRUD  fournisseurs ( id , nom , email, telephone, adresse , ville ) 
+
+On ne peu pas créer un bon commande directement , c’est les devis qui devient des bon de commande , il faut aussi avoir la référence ( numero du devis )  du devis source dans le bon de commande 
+
+Besoin d’un bouton valider sur la page des devis pour le transformer en bon de commande (la date de cette transformation prise du système devient la date du bon de commande créé, donc on a besoin d’ajouter aussi date de création a la page des bons commandes  
+
+Une page bénéfice par affaire : id affaire , total dépenses ( achats , main-d’œuvre) , total devis  , la différence entre total dépenses et total devis   
+
+ 

@@ -1,0 +1,6 @@
+-- Add missing prix columns to devis table
+ALTER TABLE devis 
+ADD COLUMN IF NOT EXISTS prix_tolerie DECIMAL(10,2) DEFAULT 0,
+ADD COLUMN IF NOT EXISTS prix_mo DECIMAL(10,2) DEFAULT 0,
+ADD COLUMN IF NOT EXISTS prix_mecanique DECIMAL(10,2) DEFAULT 0,
+ADD COLUMN IF NOT EXISTS prix_electrique DECIMAL(10,2) DEFAULT 0;

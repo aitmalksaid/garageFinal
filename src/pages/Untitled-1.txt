@@ -1,0 +1,61 @@
+<style scoped>
+.pdf-container {
+  width: 210mm;  /* Largeur d'une page A4 */
+  min-height: 297mm; /* Hauteur minimum d'une page A4 */
+  padding: 10mm;
+  background: white;
+}
+
+.articles-table {
+  width: calc(100% - 20px);  /* Largeur totale moins les marges */
+  margin: 10px;
+  overflow: visible;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+th, td {
+  border: 1px solid black;
+  padding: 8px;
+  font-size: 11px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Distribution des largeurs des colonnes */
+th:nth-child(1), td:nth-child(1) { width: 15%; } /* Intervention */
+th:nth-child(2), td:nth-child(2) { width: 35%; } /* Désignation */
+th:nth-child(3), td:nth-child(3) { width: 8%; }  /* Qté */
+th:nth-child(4), td:nth-child(4) { width: 12%; } /* P.U/H.T */
+th:nth-child(5), td:nth-child(5) { width: 12%; } /* Montant H.T */
+th:nth-child(6), td:nth-child(6) { width: 8%; }  /* TVA */
+th:nth-child(7), td:nth-child(7) { width: 10%; } /* Montant TTC */
+
+/* Alignement du texte */
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* Gestion de l'impression */
+@media print {
+  .articles-table {
+    page-break-inside: avoid; /* Évite la coupure du tableau entre les pages */
+  }
+  
+  table {
+    width: 100% !important;
+  }
+  
+  tbody {
+    break-inside: avoid; /* Évite la coupure des lignes entre les pages */
+  }
+}
+</style>

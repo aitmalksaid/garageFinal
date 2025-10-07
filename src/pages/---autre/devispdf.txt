@@ -1,0 +1,282 @@
+<template>
+  <div class="pdf-container">
+    <!-- En-tête -->
+    <div class="header">
+      <div class="header-left">
+        <p>MARRAKECH, LE : {{ formatDate(devis.date_devis) }}</p>
+      </div>
+      <div class="header-center">
+        <h1>Devis</h1>
+        <div class="devis-number">{{ devis.numero_devis }}</div>
+      </div>
+    </div>
+
+    <!-- Section AFFAIRE -->
+    <div class="affaire-section">
+      <div class="affaire-header">AFFAIRE</div>
+      <div class="affaire-content">
+        <div class="affaire-left">
+          <div class="field">
+            <span class="label">Véhicule :</span>
+            <span class="value">{{ voiture.marque || 'N/A' }}</span>
+          </div>
+          <div class="field">
+            <span class="label">Type :</span>
+            <span class="value">{{ voiture.modele || 'N/A' }}</span>
+          </div>
+          <div class="field">
+            <span class="label">Matricule :</span>
+            <span class="value">{{ voiture.immatriculation || 'N/A' }}</span>
+          </div>
+        </div>
+        <div class="affaire-right">
+          <div class="field">
+            <span class="label">Code Client :</span>
+            <span class="value">CL{{ String(client.id).padStart(5, '0') }}</span>
+          </div>
+          <div class="field">
+            <span class="label">Nom Client :</span>
+            <span class="value">{{ client.nom }} {{ client.prenom }}</span>
+          </div>
+          <div class="field">
+            <span class="label">Téléphone :</span>
+            <span class="value">{{ client.telephone || 'N/A' }}</span>
+          </div>
+          <div class="field">
+            <span class="label">ICE :</span>
+            <span class="value">{{ client.ice || 'N/A' }}</span>
+          </div>
+          <div class="field">
+            <span class="label">Type Dossier :</span>
+            <span class="value">PEC</span>
+          </div>
+          <div class="field">
+            <span class="label">Intervention:</span>
+            <span class="value">REPARATION</span>
+          </div>
+          <div class="field">
+            <span class="label">Date M.E.C :</span>
+            <span class="value">{{ formatDate(voiture.date_mise_en_circulation) || 'N/A' }}</span>
+          </div>
+          <div class="field">
+            <span class="label">Num chasis :</span>
+            <span class="value">{{ voiture.numero_chassis || 'N/A' }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section ASSURANCE -->
+    <div class="assurance-section">
+      <div class="assurance-content">
+        <div class="assurance-left">
+          <div class="field">
+            <span class="label">ASSURANCE :</span>
+            <span class="value">{{ assurance.nom || 'N/A' }}</span>
+          </div>
+          <div class="field">
+            <span class="label">Agent :</span>
+            <span class="value">{{ assurance.agent || 'N/A' }}</span>
+          </div>
+        </div>
+        <div class="assurance-center">
+          <div class="field">
+            <span class="label">Réf Sin :</span>
+            <span class="value">{{ affaire.ref_sin || 'N/A' }}</span>
+          </div>
+          <div class="field">
+            <span class="label">N° Police :</span>
+            <span class="value">{{ assurance.numero_police || 'N/A' }}</span>
+          </div>
+        </div>
+        <div class="assurance-right">
+          <div class="field">
+            <span class="label">Expert 1:</span>
+            <span class="value">{{ expert.nom }} {{ expert.prenom }}</span>
+          </div>
+          <div class="field">
+            <span class="label">Expert 2:</span>
+            <span class="value">{{ getExpert2Name() }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Note -->
+    <div class="note">
+      <p><strong>N.B :</strong> Devis établi sous réserve de dépose des pièces.</p>
+    </div>
+
+    <!-- Informations entreprise -->
+    <div class="company-info">
+      <p><strong>Carrosserie Nouvelle Génération. SARL au capital de 500.000 Dhs</strong></p>
+      <p>SIEGE SOCIAL: RUE 8 N° 16 HAY ARSALAN CASABLANCA. ATELIER: ROUTE DE SAFI LOT KARAM N 573 Q.I SIDI GHANEM - MARRAKECH</p>
+      <p>RC: 470427 PATENTE: 31900643 ICE: 0023853366000048 I.F: 42714272 FIX: 05.20.10.90.15 GSM: 06.63.00.06.68</p>
+    </div>
+
+    <!-- Tableau des interventions -->
+    <div class="interventions-table">
+      <table>
+        <thead>
+          <tr>
+            <th class="col-intervention">Intervention</th>
+            <th class="col-designation">Désignation</th>
+            <th class="col-qty">Qté</th>
+            <th class="col-pu">P.U/H.T</th>
+            <th class="col-montant">Montant H.T</th>
+            <th class="col-tva">TVA</th>
+            <th class="col-ttc">Montant TTC</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="article in devis.articles" :key="article.article_id">
+            <td></td>
+            <td>{{ article.description || article.Description }}</td>
+            <td class="text-center">{{ article.quantite }}</td>
+            <td class="text-right">{{ formatPrice(article.prix_ht) }}</td>
+            <td class="text-right">{{ formatPrice(article.prix_ht * article.quantite) }}</td>
+            <td class="text-center">{{ article.prix_ht > 0 ? '20%' : '' }}</td>
+            <td class="text-right">{{ formatPrice(article.prix_ht * article.quantite * 1.2) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { defineProps } from 'vue';
+
+const props = defineProps({
+  devis: {
+    type: Object,
+    default: () => ({ articles: [] })
+  },
+  voiture: {
+    type: Object,
+    default: () => ({})
+  },
+  client: {
+    type: Object,
+    default: () => ({})
+  },
+  assurance: {
+    type: Object,
+    default: () => ({})
+  },
+  affaire: {
+    type: Object,
+    default: () => ({})
+  },
+  expert: {
+    type: Object,
+    default: () => ({})
+  },
+  expert2: {
+    type: Object,
+    default: () => ({})
+  },
+});
+
+const formatDate = (dateString) => {
+  if (!dateString) return 'N/A';
+  const date = new Date(dateString);
+  const day = String(date.getDate()).padStart(2, '0');
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
+const formatPrice = (price) => {
+  if (typeof price !== 'number') return '0.00';
+  return price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+};
+
+const getExpert2Name = () => {
+  if (props.expert2 && props.expert2.nom) {
+    return `${props.expert2.nom} ${props.expert2.prenom || ''}`;
+  }
+  return 'N/A';
+};
+</script>
+
+<style scoped>
+.pdf-container {
+  width: 210mm;
+  height: 297mm;
+  padding: 10mm;
+  background: white;
+  font-family: Arial, sans-serif;
+  font-size: 10px;
+  color: black;
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  border-bottom: 2px solid black;
+  padding-bottom: 10px;
+}
+.logo h2 {
+  font-size: 24px;
+  font-weight: bold;
+}
+.title {
+  text-align: center;
+}
+.title h1 {
+  font-size: 28px;
+  margin: 0;
+}
+.details {
+  text-align: right;
+}
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin: 15px 0;
+}
+.info-box {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+.items-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+.items-table th, .items-table td {
+  border: 1px solid #ccc;
+  padding: 5px;
+  text-align: left;
+}
+.items-table th {
+  background-color: #f2f2f2;
+}
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+}
+.labour-summary, .parts-summary, .totals-summary {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+.labour-summary p, .parts-summary p, .totals-summary p {
+  display: flex;
+  justify-content: space-between;
+}
+.total {
+  font-weight: bold;
+  border-top: 1px solid #ccc;
+  padding-top: 5px;
+  margin-top: 5px;
+}
+.footer {
+  margin-top: 30px;
+  padding-top: 10px;
+  border-top: 2px solid black;
+}
+</style>
